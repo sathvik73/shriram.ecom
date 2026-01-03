@@ -368,7 +368,9 @@ function handleCheckout() {
     message += `------------------------\nPlease confirm my order.`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${SHOP_DETAILS.phone}?text=${encodedMessage}`;
+    // Sanitize phone number: remove spaces, dashes, etc.
+    const cleanPhone = SHOP_DETAILS.phone.replace(/[^0-9]/g, '');
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
 
     window.open(whatsappUrl, '_blank');
 }
