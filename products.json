@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "name": "Laxasfit H8 Pro Max",
+        "price": 600,
+        "description": "H8 Pro Max Smart Watch with multiple watch faces and health tracking features.",
+        "image": "images/1.jpeg"
+    },
+    {
+        "id": 2,
+        "name": "T800 Ultra Smartwatch",
+        "price": 550,
+        "description": "T800 Ultra Series 8 Replica with orange strap, wireless charging, and infinite display.",
+        "image": "images/2.jpeg"
+    },
+    {
+        "id": 3,
+        "name": "Laxasfit H6 Smartwatch",
+        "price": 500,
+        "description": "Elegant H6 Smart Watch with sleek rectangular design and comfortable strap.",
+        "image": "images/3.jpeg"
+    },
+    {
+        "id": 4,
+        "name": "T900 Ultra BIG",
+        "price": 650,
+        "description": "T900 Ultra BIG with massive 2.09-inch infinite display and rugged build.",
+        "image": "images/4.jpeg"
+    },
+    {
+        "id": 5,
+        "name": "Laxasfit H9 Pro Max",
+        "price": 700,
+        "description": "Premium H9 Pro Max Smart Watch in Rose Gold finish with pink silicone strap.",
+        "image": "images/5.jpeg"
+    },
+    {
+        "id": 6,
+        "name": "RGB Multimedia Tower Speakers",
+        "price": 1000,
+        "description": "Dual tower speaker system with dynamic RGB LED lights and powerful bass.",
+        "image": "images/6.jpeg"
+    }
+]

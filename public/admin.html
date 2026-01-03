@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - shriram.ecom</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Admin Specific Styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .product-table th,
+        .product-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .product-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .product-table tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .btn-edit:hover {
+            background-color: #dbeafe;
+        }
+
+        .btn-delete {
+            color: #dc2626;
+            background-color: #fef2f2;
+            margin-left: 0.5rem;
+        }
+
+        .btn-delete:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #fff7ed;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .product-thumb {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Modal Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            min-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 class="text-2xl font-bold mb-4">Admin Login</h2>
+            <p class="text-gray-500 mb-6">Enter password to manage store</p>
+            <input type="password" id="admin-password" placeholder="Password" class="input-field mb-4">
+            <button id="login-btn" class="btn btn-primary w-full justify-center">Login</button>
+            <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Invalid Password</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden by default) -->
+    <div id="admin-dashboard" class="hidden">
+        <div class="navbar mb-8">
+            <div class="container nav-content">
+                <h1 class="shop-title">Admin Dashboard</h1>
+                <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-primary">Go to Shop →</a>
+            </div>
+        </div>
+
+        <div class="container admin-container">
+            <div class="admin-header">
+                <div>
+                    <h2 class="text-xl font-bold">Products</h2>
+                    <p class="text-sm text-gray-500">Manage your store inventory</p>
+                </div>
+                <button id="add-product-btn" class="btn btn-primary flex items-center gap-2"
+                    style="flex: 0 0 auto; width: fit-content;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Product
+                </button>
+            </div>
+
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px">Img</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th style="width: 100px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-product-list">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px; display: block; padding: 1.5rem;">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modal-title" class="text-xl font-bold">Add Product</h3>
+                <button id="modal-close-x" class="text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="product-form">
+                <input type="hidden" id="edit-id">
+
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" id="p-name" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Price Product (₹)</label>
+                    <input type="number" id="p-price" class="form-input" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Product Image</label>
+
+                    <div class="flex gap-4 mb-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="img-type" value="upload" checked>
+                            <span class="text-sm">Upload File</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="img-type" value="url">
+                            <span class="text-sm">Image URL</span>
+                        </label>
+                    </div>
+
+                    <!-- Upload Input -->
+                    <div id="input-upload">
+                        <input type="file" id="p-image-file" class="form-input" accept="image/*">
+                        <p class="text-xs text-gray-500 mt-1">Select an image from your device</p>
+                    </div>
+
+                    <!-- URL Input -->
+                    <div id="input-url" class="hidden">
+                        <input type="text" id="p-image-url" class="form-input" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="p-desc" class="form-textarea" required></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="modal-cancel-btn" class="btn btn-outline"
+                        style="flex: 0 0 auto;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 0 0 auto;">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>
